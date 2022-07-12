@@ -1,0 +1,34 @@
+{% extends "template.html" %}
+
+{% block body %}
+    <nav><a href="/">Destinations</a></nav>
+<header>
+    <h1>Bali</h1>
+</header>
+
+<section>
+    <div>
+        <div>
+            <div class="col-lg-6">
+                <p><b>    Bali's official website describes bali as "A magical blend of culture, people, nature, activities, weather, culinary delights, nightlife, and beautiful accommodation."</b></p>
+                <ul class="innerUL">
+                    <li class="innerLI">Isolated</li>
+                    <li class="innerLI">Not modern</li>
+                    <li class="innerLI">Coastal</li>
+                    <li class="innerLI">Not primarily english speaking</li>
+                    <li class="innerLI">Not Western</li>
+                    <li class="innerLI">Not Advanced</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<div>
+    <img src="{{url_for('static', filename='bali.jpg')}}" class="center" width="1860" height="1080"/>
+    <img src="{{url_for('static', filename='bali2.jpg')}}" class="center" width="1860" height="1080"/>
+
+<script>
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "template.html" %}
+
+{% block body %}
+    <nav><a href="/">Destinations</a></nav>
+<header>
+    <h1>Trinidad & Tobago</h1>
+</header>
+
+<section>
+    <div>
+        <div>
+            <div class="col-lg-6">
+                <p><b>"Trinidad & Tobago is a twin island know for hosting the greatest carnival in the World. It is the birthplace of the steelpan instrument and home to many exotic wildlife"</b></p>
+                <ul class="innerUL">
+                    <li class="innerLI">Isolated</li>
+                    <li class="innerLI">Not modern</li>
+                    <li class="innerLI">Coastal</li>
+                    <li class="innerLI">English Speaking</li>
+                    <li class="innerLI">Western</li>
+                    <li class="innerLI">Not Advanced</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<div>
+    <img src="{{url_for('static', filename='trinidad.jpg')}}" class="center" width="1860" height="1080"/>
+    <img src="{{url_for('static', filename='trinidad2.jpg')}}" class="center" width="1860" height="1080"/>
+
+<script>
+
+</script>
+
+{% endblock %}

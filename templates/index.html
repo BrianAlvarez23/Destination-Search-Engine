@@ -1,0 +1,202 @@
+{% extends "template.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block body %}
+<header>
+  <h1>
+<b>Destinations</b>
+</h1>
+</header>
+<br>
+<div class="boxes">
+  <label class="checkbox-inline">
+    <input class="nav-item" type="checkbox" data-toggle="toggle" name="modern" id="checkbox"> Modern
+    <label class="checkbox-inline">
+      <input class="nav-item" type="checkbox" data-toggle="toggle" name="english" id="checkbox"> English Speaking
+    </label>
+    <label class="checkbox-inline">
+      <input class="nav-item" type="checkbox" data-toggle="toggle" name="western" id="checkbox"> Western
+    </label>
+    <label class="checkbox-inline">
+      <input class="nav-item" type="checkbox" data-toggle="toggle" name="advanced" id="checkbox"> Advanced
+    </label>
+    <label class="checkbox-inline">
+      <input class="nav-item" type="checkbox" data-toggle="toggle" name="isolated" id="checkbox"> Isolated
+    </label>
+    <label class="checkbox-inline">
+      <input class="nav-item" type="checkbox" data-toggle="toggle" name="coastal" id="checkbox"> Coastal
+    </label>
+    <input class = "search" type="text" id="type" placeholder="Search">
+  </div>
+<br>
+<br>
+  <ul id="list">
+  </ul>
+
+
+<script type="text/javascript">
+    function LoadList(countries) {
+        for (let i=0; i<countries.length;i++)
+        {
+          document.querySelector('#list').innerHTML += '<li><a href=/'+countries[i]["Country"].toLowerCase() +'>' + countries[i]["Country"] + '</a></li>';
+        }
+    }
+
+    function arrayCompare(list) {
+  let similarities = []
+  let ary = []
+  for (let num = 0; num<list.length; num++)
+  {
+    let para = list[num]
+    ary.push(eval(para))
+  }
+  console.log("array of arrays from arrayCompare",ary)
+    for(let m=0; m<ary[0].length; m++)
+        {
+          let counter = 0
+      for (let j = 1; j < list.length; j++)
+          {
+            for(let k=0; k<ary[j].length; k++)
+            {
+            console.log(ary[0][m]["Country"])
+            console.log(ary[j][k]["Country"])
+            let str1 = ary[0][m]["Country"]
+            let str2 = ary[j][k]["Country"]
+              if (str1 === str2)
+              {
+              console.log("2nd if activated, counter++")
+              counter++
+                if (counter == list.length - 1)
+                {
+                  console.log("3rd if activiated")
+                  similarities.push(str1)
+                  console.log("siimilarities from function",similarities)
+                }
+              }
+            }
+          }
+        }
+let toFindDuplicates = similarities => similarities.filter((item, index) => similarities.indexOf(item) !== index)
+let duplicateElements = toFindDuplicates(similarities);
+console.log(duplicateElements);
+  console.log("similarities",similarities)
+  console.log("returning")
+  return(similarities)
+}
+
+      const countries={{ countries|safe }}
+      const english={{ english|safe }}
+      const modern={{ modern|safe }}
+      const coastal={{ coastal|safe }}
+      const isolated={{ isolated|safe }}
+      const western={{ western|safe }}
+      const advanced={{ advanced|safe }}
+
+      var gp = []
+      for(let z = 0; z<countries.length;z++)
+  {
+    gp.push(countries[z]["Country"])
+  }
+
+
+    LoadList(countries)
+
+    let input = document.querySelector('#type');
+    input.addEventListener('input', async function() {
+      let search = input.value.toString()
+      if (search == "")
+      {
+        document.querySelector('ul').innerHTML =''
+        for (let m=0; m<gp.length;m++)
+        {
+          document.querySelector('ul').innerHTML += '<li><a href=/'+gp[0].toString().toLowerCase() +'>' + gp[m] + '</a></li>';
+        }
+        return
+      }
+      let list = []
+      for (let i = 0; i<gp.length; i++)
+      {
+        list.push(gp[i])
+      }
+      console.log("list",list)
+      let printed = []
+        for (let j = 0; j<list.length;j++)
+        {
+          let score = 0
+          let string = list[j]
+          for(let m = 0; m < string.length; m++)
+          {
+            let char1 = search.toLowerCase()
+            let char2 = string.toLowerCase()
+            if (char1[m] == char2[m])
+            {
+              score++
+              if (score == search.length)
+              {
+                printed.push(string)
+              }
+            }
+          }
+        }
+        console.log("printed",printed)
+      document.querySelector('ul').innerHTML =''
+      for (let h=0; h<printed.length;h++)
+        {
+          document.querySelector('ul').innerHTML += '<li><a href=/'+printed[h].toLowerCase() +'>' + printed[h] + '</a></li>';
+        }
+    })
+
+document.querySelectorAll('#checkbox').forEach(item => {
+  item.addEventListener('change', async function() {
+  let list = []
+  let count = 0
+  var checkboxes = document.querySelectorAll('#checkbox');
+  console.log(checkboxes)
+for(let i=0; i<checkboxes.length; i++)
+{
+    if(checkboxes[i].checked == true)
+    {
+      console.log("box was checked")
+      count++
+      list.push(checkboxes[i].name);
+    }
+}
+console.log(list)
+if (count == 0)
+{
+  gp = []
+  document.querySelector('ul').innerHTML =''
+  for(let z = 0; z<countries.length;z++)
+  {
+    gp.push(countries[z]["Country"])
+  }
+  LoadList(countries)
+  return
+}
+if (count == 1)
+{
+  gp = []
+  bufferA = (eval(list[0]))
+  console.log("bufferA",bufferA)
+  for(let z = 0; z<bufferA.length;z++)
+  {
+    gp.push(bufferA[z]["Country"])
+  }
+}
+else if (count > 1){
+console.log("more than 1 box selected")
+gp = arrayCompare(list)
+}
+document.querySelector('ul').innerHTML =''
+for (let m=0; m<gp.length;m++)
+        {
+          document.querySelector('ul').innerHTML += '<li><a href=/'+gp[0].toString().toLowerCase() +'>' + gp[m] + '</a></li>';
+        }
+})
+});
+
+  </script>
+  {% endblock %}
