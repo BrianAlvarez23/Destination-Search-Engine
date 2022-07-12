@@ -11,6 +11,7 @@
 </h1>
 </header>
 <br>
+<!-- Create a checkbox for every category-->
 <div class="boxes">
   <label class="checkbox-inline">
     <input class="nav-item" type="checkbox" data-toggle="toggle" name="modern" id="checkbox"> Modern
@@ -33,6 +34,7 @@
   </div>
 <br>
 <br>
+<!--create an empty unnordered list to insert data into via javasript-->
   <ul id="list">
   </ul>
 
@@ -41,52 +43,12 @@
     function LoadList(countries) {
         for (let i=0; i<countries.length;i++)
         {
+          //load evry individual string from an array to the unordered list and create a link with it's name
           document.querySelector('#list').innerHTML += '<li><a href=/'+countries[i]["Country"].toLowerCase() +'>' + countries[i]["Country"] + '</a></li>';
         }
     }
 
-    function arrayCompare(list) {
-  let similarities = []
-  let ary = []
-  for (let num = 0; num<list.length; num++)
-  {
-    let para = list[num]
-    ary.push(eval(para))
-  }
-  console.log("array of arrays from arrayCompare",ary)
-    for(let m=0; m<ary[0].length; m++)
-        {
-          let counter = 0
-      for (let j = 1; j < list.length; j++)
-          {
-            for(let k=0; k<ary[j].length; k++)
-            {
-            console.log(ary[0][m]["Country"])
-            console.log(ary[j][k]["Country"])
-            let str1 = ary[0][m]["Country"]
-            let str2 = ary[j][k]["Country"]
-              if (str1 === str2)
-              {
-              console.log("2nd if activated, counter++")
-              counter++
-                if (counter == list.length - 1)
-                {
-                  console.log("3rd if activiated")
-                  similarities.push(str1)
-                  console.log("siimilarities from function",similarities)
-                }
-              }
-            }
-          }
-        }
-let toFindDuplicates = similarities => similarities.filter((item, index) => similarities.indexOf(item) !== index)
-let duplicateElements = toFindDuplicates(similarities);
-console.log(duplicateElements);
-  console.log("similarities",similarities)
-  console.log("returning")
-  return(similarities)
-}
-
+    //load in data from SQL via flask using jinja
       const countries={{ countries|safe }}
       const english={{ english|safe }}
       const modern={{ modern|safe }}
@@ -95,33 +57,35 @@ console.log(duplicateElements);
       const western={{ western|safe }}
       const advanced={{ advanced|safe }}
 
-      var gp = []
+      //create a global variable "gl" (Global List) to reference between functions
+      var gl = []
       for(let z = 0; z<countries.length;z++)
   {
-    gp.push(countries[z]["Country"])
+    gl.push(countries[z]["Country"])
   }
 
-
+  // Show all countries by default when page is loaded
     LoadList(countries)
 
+    // create aysnc function that compares what the user has typed to whatever 'gl' is at the moment and display the countries that match their input
     let input = document.querySelector('#type');
     input.addEventListener('input', async function() {
       let search = input.value.toString()
+      // if input is empty load back whatever 'gl' is at the moment
       if (search == "")
       {
         document.querySelector('ul').innerHTML =''
-        for (let m=0; m<gp.length;m++)
+        for (let m=0; m<gl.length;m++)
         {
-          document.querySelector('ul').innerHTML += '<li><a href=/'+gp[0].toString().toLowerCase() +'>' + gp[m] + '</a></li>';
+          document.querySelector('ul').innerHTML += '<li><a href=/'+gl[0].toString().toLowerCase() +'>' + gl[m] + '</a></li>';
         }
         return
       }
       let list = []
-      for (let i = 0; i<gp.length; i++)
+      for (let i = 0; i<gl.length; i++)
       {
-        list.push(gp[i])
+        list.push(gl[i])
       }
-      console.log("list",list)
       let printed = []
         for (let j = 0; j<list.length;j++)
         {
@@ -141,7 +105,6 @@ console.log(duplicateElements);
             }
           }
         }
-        console.log("printed",printed)
       document.querySelector('ul').innerHTML =''
       for (let h=0; h<printed.length;h++)
         {
@@ -149,54 +112,83 @@ console.log(duplicateElements);
         }
     })
 
+// create a function that update the 'ul' within the html when a checkbox is clicked
 document.querySelectorAll('#checkbox').forEach(item => {
   item.addEventListener('change', async function() {
   let list = []
   let count = 0
   var checkboxes = document.querySelectorAll('#checkbox');
-  console.log(checkboxes)
 for(let i=0; i<checkboxes.length; i++)
 {
     if(checkboxes[i].checked == true)
     {
-      console.log("box was checked")
       count++
       list.push(checkboxes[i].name);
     }
 }
-console.log(list)
 if (count == 0)
 {
-  gp = []
+  gl = []
   document.querySelector('ul').innerHTML =''
   for(let z = 0; z<countries.length;z++)
   {
-    gp.push(countries[z]["Country"])
+    gl.push(countries[z]["Country"])
   }
   LoadList(countries)
   return
 }
 if (count == 1)
 {
-  gp = []
+  gl = []
   bufferA = (eval(list[0]))
-  console.log("bufferA",bufferA)
   for(let z = 0; z<bufferA.length;z++)
   {
-    gp.push(bufferA[z]["Country"])
+    gl.push(bufferA[z]["Country"])
   }
 }
 else if (count > 1){
-console.log("more than 1 box selected")
-gp = arrayCompare(list)
+gl = arrayCompare(list)
 }
 document.querySelector('ul').innerHTML =''
-for (let m=0; m<gp.length;m++)
+for (let m=0; m<gl.length;m++)
         {
-          document.querySelector('ul').innerHTML += '<li><a href=/'+gp[0].toString().toLowerCase() +'>' + gp[m] + '</a></li>';
+          document.querySelector('ul').innerHTML += '<li><a href=/'+gl[0].toString().toLowerCase() +'>' + gl[m] + '</a></li>';
         }
 })
 });
 
+// create a function that accepts a list of arrays and compares all of their contents and return the similarities between all of them
+function arrayCompare(list) {
+  let similarities = []
+  let ary = []
+  for (let num = 0; num<list.length; num++)
+  {
+    let para = list[num]
+    ary.push(eval(para))
+  }
+    for(let m=0; m<ary[0].length; m++)
+        {
+          let counter = 0
+      for (let j = 1; j < list.length; j++)
+          {
+            for(let k=0; k<ary[j].length; k++)
+            {
+            let str1 = ary[0][m]["Country"]
+            let str2 = ary[j][k]["Country"]
+              if (str1 === str2)
+              {
+              counter++
+                if (counter == list.length - 1)
+                {
+                  similarities.push(str1)
+                }
+              }
+            }
+          }
+        }
+let toFindDuplicates = similarities => similarities.filter((item, index) => similarities.indexOf(item) !== index)
+let duplicateElements = toFindDuplicates(similarities);
+  return(similarities)
+}
   </script>
   {% endblock %}
